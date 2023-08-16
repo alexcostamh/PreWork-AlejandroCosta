@@ -73,3 +73,29 @@ WHERE cantidad >= 5;
 -- 15. Consultar clientes cuyo nombre empiece con "A"
 SELECT * FROM Clientes
 WHERE nombre LIKE 'A%';
+
+-- 16. Consultar nombre del cliente y total de pedidos
+SELECT Clientes.nombre, COUNT(Pedidos.id) AS total_pedidos
+FROM Clientes
+LEFT JOIN Pedidos ON Clientes.id = Pedidos.cliente_id
+GROUP BY Clientes.nombre;
+
+-- 17. Consultar nombre del producto y cantidad total de pedidos
+SELECT Productos.nombre, SUM(Pedidos.cantidad) AS total_cantidad
+FROM Productos
+LEFT JOIN Pedidos ON Productos.nombre = Pedidos.producto
+GROUP BY Productos.nombre;
+
+-- 18. Agregar columna "fecha" a la tabla "Pedidos"
+ALTER TABLE Pedidos
+ADD fecha DATE;
+
+-- 19. Agregar clave externa a la tabla "Pedidos" referenciando a "Productos"
+ALTER TABLE Pedidos
+ADD CONSTRAINT fk_productos
+FOREIGN KEY (producto) REFERENCES Productos(nombre);
+
+-- 20. Consultar nombres de clientes, nombres de productos y cantidades
+SELECT Clientes.nombre AS nombre_cliente, Pedidos.producto, Pedidos.cantidad
+FROM Pedidos
+JOIN Clientes ON Pedidos.cliente_id = Clientes.id;
